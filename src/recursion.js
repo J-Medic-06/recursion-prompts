@@ -34,16 +34,16 @@ var arraySum = function(array) {
   var result = [];
 
   var index = array.length - 1;
-  if(index === -1) {
-    return 0;
-  } else {
-    array.forEach(function (item) {
-
-      result = result.concat(flatten(item));
-    });
+  var innerFunction = function (input) {
+    if(!Array.isArray(input)) {
+      return input;
+    } else {
+      input.forEach(function (item) {
+        result = result.concat(arraySum(item));
+      });
+    }
   }
-    return array[index] + arraySum(array.slice(0, index));
-
+  return result;
 };
 
 // 4. Check if a number is even.
@@ -83,6 +83,15 @@ var sumBelow = function(n) {
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
 var range = function(x, y) {
+  var result = [];
+  if (y - x === 0 || y - x === 1 || x - y === 1) {
+    return [];
+  }
+
+    result.push(range(x + 1));
+
+  innerFunction(x, y);
+  return result;
 };
 
 // 7. Compute the exponent of a number.
@@ -91,6 +100,21 @@ var range = function(x, y) {
 // exponent(4,3); // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
 var exponent = function(base, exp) {
+
+  if(exp === -1) {
+    return 1 / base;
+  }
+  if (exp === 1) {
+    return base;
+  }
+  if (exp < 0) {
+    return base = (1 / base) * 1 / exponent(1 / base, exp + 1);
+  } else {
+    return base = base * exponent(base, exp - 1);
+  }
+  if (exp === 0) {
+    return 1;
+  }
 };
 
 // 8. Determine if a number is a power of two.
@@ -98,6 +122,28 @@ var exponent = function(base, exp) {
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
 var powerOfTwo = function(n) {
+
+  if (n === 0) {
+    return false;
+
+  } else if (n === 2) {
+    return true;
+
+  }else if (n < 2 && n > 0) {
+
+    var x = 2 * n;
+    return x > 2 ? false
+      : x === 2 ? true
+      : powerOfTwo(x);
+
+  } else if (n > 2) {
+
+    var x = n / 2;
+    return x < 2 ? false
+      : x === 2 ? true
+      : powerOfTwo(x);
+  }
+
 };
 
 // 9. Write a function that reverses a string.
