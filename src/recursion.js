@@ -26,21 +26,22 @@ var sum = function(array) {
   } else {
     return array[index] + sum(array.slice(0, index));
   }
+  return result;
 };
 
 // 3. Sum all numbers in an array containing nested arrays.
 // arraySum([1,[2,3],[[4]],5]); // 15
 var arraySum = function(array) {
-  var result = [];
-
-  var index = array.length - 1;
-  var innerFunction = function (input) {
-    if(!Array.isArray(input)) {
-      return input;
+  if (array.length === -1) {
+    return 0;
+  }
+  var result = 0;
+  for (var i = 0; i < array.length; i++) {
+    if (Array.isArray(array[i])) {
+      result += arraySum(array[i]);
+      continue;
     } else {
-      input.forEach(function (item) {
-        result = result.concat(arraySum(item));
-      });
+      result += array[i];
     }
   }
   return result;
@@ -83,15 +84,16 @@ var sumBelow = function(n) {
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
 var range = function(x, y) {
-  var result = [];
-  if (y - x === 0 || y - x === 1 || x - y === 1) {
+  if (x === y || x + 1 === y) {
     return [];
   }
-
-    result.push(range(x + 1));
-
-  innerFunction(x, y);
-  return result;
+  if (x < y) {
+    var list = [x + 1];
+    return x + 3 === y ? list.concat(x + 2) : list.concat(range(x + 1 , y))
+  } else if (x > y) {
+    var list = [x - 1];
+    return x - 3 === y ? list.concat(x - 2) : list.concat(range(x - 1 , y))
+  }
 };
 
 // 7. Compute the exponent of a number.
@@ -148,10 +150,23 @@ var powerOfTwo = function(n) {
 
 // 9. Write a function that reverses a string.
 var reverse = function(string) {
+  return string === '' ? '' : reverse(string.substr(1)) + string.charAt(0);
+
 };
 
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string) {
+  if (string.length === 1 || string.length === 0) {
+    return true;
+  }
+  if (string.slice(0, 1).toLowerCase() !== string.slice(-1).toLowerCase()) {
+    return false;
+  } else {
+      var letter = string.split('');
+      letter.shift();
+      letter.pop();
+      return palindrome(letter.join(''));
+  }
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
