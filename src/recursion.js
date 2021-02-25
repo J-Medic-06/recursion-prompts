@@ -151,7 +151,6 @@ var powerOfTwo = function(n) {
 // 9. Write a function that reverses a string.
 var reverse = function(string) {
   return string === '' ? '' : reverse(string.substr(1)) + string.charAt(0);
-
 };
 
 // 10. Write a function that determines if a string is a palindrome.
@@ -241,6 +240,16 @@ var rMap = function(array, callback) {
 // countKeysInObj(obj, 'r') // 1
 // countKeysInObj(obj, 'e') // 2
 var countKeysInObj = function(obj, key) {
+  var result = 0;
+  for (var name in obj) {
+    if (name === key) {
+      result++
+    }
+    if (typeof(obj[name]) === 'object') {
+      result += countKeysInObj(obj[name], key);
+    }
+  }
+  return result;
 };
 
 // 23. Write a function that counts the number of times a value occurs in an object.
@@ -248,11 +257,33 @@ var countKeysInObj = function(obj, key) {
 // countValuesInObj(obj, 'r') // 2
 // countValuesInObj(obj, 'e') // 1
 var countValuesInObj = function(obj, value) {
+  var result = 0;
+  for (var key in obj) {
+    if (typeof(obj[key]) === 'object') {
+      result += countValuesInObj(obj[key], value);
+      continue;
+    } else if (typeof(obj[key]) !== 'object' && obj[key] !== value) {
+      continue;
+    } if (typeof(obj[key]) !== 'object' && obj[key] === value) {
+      result++;
+    }
+  }
+
 };
 
 // 24. Find all keys in an object (and nested objects) by a provided name and rename
 // them to a provided new name while preserving the value stored at that key.
 var replaceKeysInObj = function(obj, oldKey, newKey) {
+  for (var prop in obj) {
+    if (prop === oldKey) {
+      obj[newKey] = obj[oldKey];
+      delete obj[oldKey];
+    }
+    if (typeof(obj[prop]) === 'object') {
+      return replaceKeysInObj(obj[name], oldKey, newKey);
+    }
+  }
+  return obj;
 };
 
 // 25. Get the first n Fibonacci numbers. In the Fibonacci sequence, each subsequent
